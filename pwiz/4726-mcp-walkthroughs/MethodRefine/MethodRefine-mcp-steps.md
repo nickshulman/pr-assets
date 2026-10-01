@@ -1,14 +1,15 @@
 # Targeted Method Refinement, driven through the Skyline MCP
 
 Every step of the **Targeted Method Refinement** tutorial (`Tutorials/MethodRefine/en/index.html`), with the
-MCP calls that performed it and a screenshot of the result. Driven live on 2026-09-26 against the Release x64
-build of branch `Skyline/work/20260921_typing_in_sequence_tree` at commit `8db86a365c`, from a blank document
-through the five scheduled replicates, including the optional re-import of the 39 unrefined RAW files. Where
-the tutorial says to press a key (Delete, F11, Shift-F11, Home, Ctrl-Z, Ctrl-R, Ctrl-S, Ctrl-T, F7, F8,
-Escape) or Shift-click, that is what was done.
+MCP calls that performed it and a screenshot of the result. Driven live on 2026-10-01 against the Release x64
+build of branch `Skyline/work/20260921_typing_in_sequence_tree` at commit `b6f020d1fa` (master merged in,
+including #4748's off-screen form rendering), from a blank document through the five scheduled replicates,
+including the optional re-import of the 39 unrefined RAW files. Where the tutorial says to press a key
+(Delete, F11, Shift-F11, Home, Ctrl-Z, Ctrl-R, Ctrl-S, Ctrl-T, F7, F8, Escape) or Shift-click, that is what
+was done.
 
 - **Data:** fresh extractions of `MethodRefine.zip` and `MethodRefineSupplement.zip` (the RAW versions) to
-  `E:\Users\nicksh\SkylineDownloadPath2\Tutorials\MethodRefine_20260926b`
+  `E:\Users\nicksh\SkylineDownloadPath2\Tutorials\MethodRefine_20261001`
 - **Outcome:** every count the tutorial gives matched: 225 peptides / 2096 transitions at the start, 39
   `worm_NNNN.csv` lists (2096 rows), 146 peptides and a 15.77 min window in the regression, 80 / 240 after
   the strict refinement, 127 after the loose one, 86 / 255 after the unscheduled import, 2
@@ -48,6 +49,14 @@ are written `tool(arg=value)` with the `skyline_` prefix dropped. A few more mat
   `get_open_forms`; the common-prefix form follows the file browser a moment later. **Wait for s-06's r =
   0.9511 before Create Regression**: sent while the threshold change is still being applied, it takes the
   previous regression (140 peptides, a 22.8 min window, and Predicted 46.3 in s-09).
+- **Settings outlive the document.** The regression graph's calculator and threshold, Ion Types > B, the
+  Export form's Ignore proteins and Edit > Expand All are remembered by Skyline, not by the document, and
+  Settings > Default does not reset them. This Skyline had been used for other tutorials, so the regression
+  opened on iRT-C18 with a threshold of 0.998; both were put back to a fresh install's (SSRCalc 3.0 (300A),
+  0.90) before s-05.
+- **Where a window sits matters to the capture** (#4748, see Gaps): the main window was placed with
+  `SetWindowPos` from PowerShell, as a reader drags a window, so that it and the dialogs centred on it stayed
+  clear of two 1-pixel windows of another application.
 
 ## Window sizes and layouts
 
@@ -74,6 +83,7 @@ back, as the test's `FocusDocument` does.
 | "Make sure the MethodRefine folder is selected" in Browse For Folder | The native folder dialog exposes only its label and buttons, so the folder it has selected cannot be read (a reader sees it on screen); it can only be set | `set_form_value` with the folder path, then OK |
 | Ctrl-click transitions in the Targets tree | No Ctrl-click in the tree | `set_selection` with `additionalLocators` |
 | Windows Explorer / Excel views of the output | Outside Skyline | Row counts and first lines read from the files |
+| Captures with #4748 (now on master) | `IsShownOnScreen` treats any visible window of another application above the form as covering it, and two **1 x 1 pixel** windows of ReSharper's out-of-process host sat over the screen, so a form over either pixel came out of the off-screen fallback (plain grey frame) instead of the screen. The first Refine capture did, its dialog being taller than the 722 x 449 main window it is centred on | The main window placed clear of the two pixels for each size; the strict Refine pass undone and repeated. The import progress form opens where it last closed, over both pixels, and is gone within seconds, so s-03, `11-importing-unscheduled` and `15-importing-scheduled` are off-screen renders. The check should ignore windows too small to hide anything |
 
 ### Fixed during this work
 
@@ -125,9 +135,11 @@ get_ui_mode()   -> proteomic
 
 ![Start page](images/00-start-page.png)
 
-The first `get_form_image` of a session opens Skyline's screen-capture consent dialog, answered once. As
-preparation, not a tutorial step, the Peptide Settings > Prediction list was checked for a WormUnrefined
-predictor left by an earlier run (there was none), so Create Regression proposes the tutorial's name.
+The first `get_form_image` of a session can open Skyline's screen-capture consent dialog, answered once
+(this Skyline had already been granted it). As preparation, not a tutorial step, the retention time
+predictor list was checked for a WormUnrefined predictor left by an earlier run
+(`get_settings_list_names(listType="RetentionTimeList")`: there was none), so Create Regression proposes the
+tutorial's name.
 
 ```
 click_main_menu_item(menuPath="File > Open")
@@ -148,7 +160,7 @@ click_main_menu_item(menuPath="View > Auto-Zoom > Best Peak")
 resize_window(formId="SkylineWindow:Skyline - WormUnrefined.sky", width=1266, height=736)
 get_graph_image(formId="GraphSpectrum:Library Match")   # y-ions only: b-ions are off
 click_main_menu_item(menuPath="View > Libraries > Ion Types > B")
-get_graph_image(formId="GraphSpectrum:Library Match")   # redrawn a moment later: b5 ... b15 in purple
+get_graph_image(formId="GraphSpectrum:Library Match")   # b5 ... b15 in purple
 get_form_image(formId="SkylineWindow:Skyline - WormUnrefined.sky")
 ```
 
@@ -168,7 +180,8 @@ click_form_button(formId="ExportMethodDlg:Export Transition List", button="Multi
 set_form_value(formId=..., controlId="Max transitions per sample injection", value="59")
 ```
 
-**s-02**: `Methods: 39` (counted a moment after the value is set; the first capture showed "...").
+**s-02**: `Methods: 39` (counted a moment after the value is set; an earlier run's first capture showed
+"...").
 
 ![s-02](images/s-02.png)
 
@@ -214,7 +227,8 @@ click_form_button(formId="OpenDataSourceDialog:Import Results Files", button="Op
 get_form_image(formId="AllChromatogramsGraph:Importing Results...")   # straight away, while it is up
 ```
 
-**s-03**: caught at the very start of the import, before any chromatogram is drawn.
+**s-03**: caught 8 seconds in, the 15 files at 92-99%. An off-screen render (plain frame): the progress
+form opened where it last closed, over the two pixels in Gaps.
 
 ![s-03](images/s-03.png)
 
@@ -261,9 +275,19 @@ get_selection()         -> Molecule:/peptides1/VLEAGGLDC[+57.021464]DMENANSVVDAL
 
 ```
 click_main_menu_item(menuPath="View > Retention Times > Regression > Score To Run")
-get_graph_image(formId="GraphSummary:Retention Times - Score To Run Regression")   # blank, then:
+get_graph_image(formId="GraphSummary:Retention Times - Score To Run Regression")
+  # x-axis iRT-C18, r = 1 over 2 peptides: the calculator an earlier tutorial chose
+click_control_menu_item(formId="GraphSummary:Retention Times - Score To Run Regression",
+                        control="ZedGraphControl", menuPath="Calculator > SSRCalc 3.0 (300A)")
+  # now r = 0.9981: the threshold an earlier tutorial set (0.998)
+click_control_menu_item(formId=..., control="", menuPath="Set Threshold")
+set_form_value(formId="RegressionRTThresholdDlg:Set Retention Time Threshold", controlId="Threshold", value="0.90")
+dismiss_with_accept_button(formId="RegressionRTThresholdDlg:Set Retention Time Threshold")
 get_graph_image(formId="GraphSummary:Retention Times - Score To Run Regression")
 ```
+
+Both are a fresh install's defaults; the tutorial assumes them without saying so. The graph's right-click
+menu is reached with `control="ZedGraphControl"` here, its own menu with `control=""`.
 
 **s-05**: r = 0.9033 refined, the selected peptide in red.
 
@@ -279,7 +303,6 @@ set_form_value(formId="RegressionRTThresholdDlg:Set Retention Time Threshold", c
 
 ```
 dismiss_with_accept_button(formId="RegressionRTThresholdDlg:Set Retention Time Threshold")
-get_graph_image(formId="GraphSummary:Retention Times - Score To Run Regression")   # still r = 0.9033
 get_graph_image(formId="GraphSummary:Retention Times - Score To Run Regression")   # r = 0.9511
 ```
 
@@ -298,7 +321,6 @@ WormUnrefined, 146 peptides, R = 0.9511, time window 15.7657, SSRCalc 3.0 (300A)
 
 ```
 dismiss_with_accept_button(formId="EditRTDlg:Edit Retention Time Predictor")
-get_graph_image(formId="GraphChromatogram:Unrefined")   # no band yet, then:
 get_graph_image(formId="GraphChromatogram:Unrefined")
 ```
 
@@ -372,7 +394,6 @@ get_graph_image(formId="GraphChromatogram:Unrefined")
 
 ```
 click_main_menu_item(menuPath="File > Import > Window Layout")   # p16.view
-get_graph_image(formId="GraphSpectrum:Library Match")            # blank: still loading, then:
 get_graph_image(formId="GraphSpectrum:Library Match")
 ```
 
@@ -458,6 +479,12 @@ set_form_value(formId="RefineDlg:Refine", controlId="Min dotp", value="0.8")
 ```
 dismiss_with_accept_button(formId="RefineDlg:Refine")
 get_document_status()   -> 80 peptides, 240 transitions
+```
+
+The first capture of this form came out of the off-screen fallback (see Gaps), so the pass was undone with
+Ctrl-Z, the main window moved right, and the form filled in and captured again: the same 80 / 240.
+
+```
 click_main_menu_item(menuPath="Edit > Collapse All > Peptides")
 send_key_stroke(formId="SequenceTreeForm:Targets", controlId="SequenceTree", keyStroke="Home")   -> peptides1
 send_key_stroke(formId="SequenceTreeForm:Targets", controlId="SequenceTree", keyStroke="Down")   # and on
@@ -517,6 +544,8 @@ get_form_image(formId="AllChromatogramsGraph:Importing Results...")
 ```
 
 ![Importing the unscheduled replicates](images/11-importing-unscheduled.png)
+
+13 seconds in; an off-screen render, like s-03.
 
 ```
 get_open_forms()   # polled until 'AllChromatogramsGraph' was gone
@@ -654,6 +683,11 @@ get_form_image(formId="AllChromatogramsGraph:Importing Results...")
 
 ![Importing the scheduled replicates](images/15-importing-scheduled.png)
 
+The five files import in about four seconds, and the first try missed the form altogether. The import was
+undone with Ctrl-Z and repeated (File > Import > Results then asked to save the document to drop the
+results left on disk: Yes, the state Ctrl-S had left). This capture caught the very start, before any
+chromatogram is drawn; an off-screen render, like s-03.
+
 Tiled is Ctrl-T, Retention Times > Replicate Comparison F8, Peak Areas > Replicate Comparison F7:
 
 ```
@@ -670,8 +704,7 @@ click_main_menu_item(menuPath="Edit > Collapse All > Peptides")
 send_key_stroke(formId="SequenceTreeForm:Targets", controlId="SequenceTree", keyStroke="Home")
 send_key_stroke(formId="SequenceTreeForm:Targets", controlId="SequenceTree", keyStroke="Down")
 send_key_stroke(formId="GraphChromatogram:REP05", controlId="", keyStroke="Esc")   # focus to Targets
-get_form_image(formId="SkylineWindow:Skyline - WormUnrefined.sky *")   # the first capture caught the
-get_form_image(formId="SkylineWindow:Skyline - WormUnrefined.sky *")   # RT graph mid-redraw
+get_form_image(formId="SkylineWindow:Skyline - WormUnrefined.sky *")
 ```
 
 **s-21**: five tiled replicates without legends, peak areas docked right, retention times docked at the
