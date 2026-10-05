@@ -26,3 +26,4 @@ could not be shown in the pull request itself.
 |---|---|---|
 | ProteoWizard/pwiz | [#4726](https://github.com/ProteoWizard/pwiz/pull/4726) AI connector gaps found by walking the tutorials through MCP | [pwiz/4726-mcp-walkthroughs](pwiz/4726-mcp-walkthroughs) |
 | ProteoWizard/pwiz | [#4748](https://github.com/ProteoWizard/pwiz/pull/4748) Off-screen rendering fallback for form images | [pwiz/4748-offscreen-rendering](pwiz/4748-offscreen-rendering) |
+| ProteoWizard/pwiz | [#4755](https://github.com/ProteoWizard/pwiz/pull/4755) Inno installer: settings import, update check, external tools for all-users installs | [pwiz/4755-installer-settings](pwiz/4755-installer-settings) |
