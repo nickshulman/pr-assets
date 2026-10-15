@@ -28,3 +28,4 @@ could not be shown in the pull request itself.
 | ProteoWizard/pwiz | [#4748](https://github.com/ProteoWizard/pwiz/pull/4748) Off-screen rendering fallback for form images | [pwiz/4748-offscreen-rendering](pwiz/4748-offscreen-rendering) |
 | ProteoWizard/pwiz | [#4755](https://github.com/ProteoWizard/pwiz/pull/4755) Inno installer: settings import, update check, external tools for all-users installs | [pwiz/4755-installer-settings](pwiz/4755-installer-settings) |
 | ProteoWizard/pwiz | [#4823](https://github.com/ProteoWizard/pwiz/pull/4823) Osprey protein-group q-values calibrated against entrapment | [pwiz/4823-protein-fdr](pwiz/4823-protein-fdr) |
+| ProteoWizard/pwiz | [#4849](https://github.com/ProteoWizard/pwiz/pull/4849) AlphaPeptDeep library building with CarafeSharp in process, GPU download | [pwiz/4849-alphapeptdeep](pwiz/4849-alphapeptdeep) |
