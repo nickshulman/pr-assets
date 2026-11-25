@@ -29,3 +29,4 @@ could not be shown in the pull request itself.
 | ProteoWizard/pwiz | [#4755](https://github.com/ProteoWizard/pwiz/pull/4755) Inno installer: settings import, update check, external tools for all-users installs | [pwiz/4755-installer-settings](pwiz/4755-installer-settings) |
 | ProteoWizard/pwiz | [#4823](https://github.com/ProteoWizard/pwiz/pull/4823) Osprey protein-group q-values calibrated against entrapment | [pwiz/4823-protein-fdr](pwiz/4823-protein-fdr) |
 | ProteoWizard/pwiz | [#4849](https://github.com/ProteoWizard/pwiz/pull/4849) AlphaPeptDeep library building with CarafeSharp in process, GPU download | [pwiz/4849-alphapeptdeep](pwiz/4849-alphapeptdeep) |
+| ProteoWizard/pwiz | [#5078](https://github.com/ProteoWizard/pwiz/pull/5078) SkylineCore.dll split so SkylineCmd runs on Linux: architecture diagrams | [pwiz/5078-skylinecore-split](pwiz/5078-skylinecore-split) |
